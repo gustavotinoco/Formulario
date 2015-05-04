@@ -1,0 +1,55 @@
+<title>Shared Todo App </title>
+<div class="container">
+  <div class="row">
+    <div class="span4">
+      
+      <h1>Mi lista de tareas</h1>
+      <hr>
+      
+      <p>Todo item</p>
+			<%= form_for @new_todo, :url => { :action => "add" }  do |f|  %>
+    		<%= f.text_field  :todo_item %><br>
+        <%= f.label :deadLine%><br>
+        <%= f.date_field :deadLine%><br>
+        <br>
+    		<%= f.submit "Agregar", class: "btn btn-primary" %>
+ 			<%end%>
+
+      <%= form_for :todo_item, :url => {:action => 'edit'} do |f| %>
+
+      <%end%>
+      	
+        <p>All your todos here</p>
+      	<% if flash[:error] != nil %>
+    		<div class="alert alert-danger">
+      		<button type="button" class="close" data-dismiss="alert">×</button>
+      		<strong><%= flash[:error] %></strong>
+    		</div>
+    		<% end %>
+
+    	<% if flash[:success] != nil %>
+   			<div class="alert alert-success">
+   			<button type="button" class="close" data-dismiss="alert">×</button>
+      		<strong><%= flash[:success] %></strong>
+   			</div>
+			<% end %>
+      
+      <div class="well">
+        <%= form_tag("/todos/complete/", :method => "post") do %>
+        <ul style="list-style-type:none;">
+        <% @todo_items.each do |t| %> 
+            <% if t.completed == true %>
+              <li style="color:grey;"> <%= check_box_tag  "todos_checkbox[]",t.id %>  <strike><%= t.todo_item %></strike> </li>
+            <% else %>
+              <li> <%= check_box_tag  "todos_checkbox[]",t.id %> <%= t.todo_item %>  </li>
+            <% end %>
+        <%end%>
+        </ul>
+        <%= submit_tag("Toggle", :class=>"btn btn-success") %>
+        <%= submit_tag"Delete", :class=>"btn btn-danger", data:{confirm: "Esta seguro"} %>
+
+        <%end %>
+      </div> <!-- well -->
+    </div> <!-- span4 -->
+  </div> <!-- row -->
+</div> <!-- container -->
